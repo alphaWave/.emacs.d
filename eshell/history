@@ -1,0 +1,6 @@
+ls
+cd Applications/
+ls
+cd ..
+ls
+man brew
