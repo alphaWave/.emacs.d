@@ -11,7 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
+   '(which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -29,7 +29,7 @@
 
 ;;(load-theme 'tango-dark)
 ;;(load-theme 'wombat)
-;;(load-theme 'deeper-blue)
+;; (load-theme 'deeper-blue)
 
 ;; (use-package spacemacs-theme	       
 ;;   :ensure t
@@ -40,8 +40,11 @@
 
 ;; (load-theme 'monokai t)
 
-(load-theme 'ample t t)
-(enable-theme 'ample)
+;; (load-theme 'ample t t)
+;; (enable-theme 'ample)
+
+(add-to-list 'custom-theme-load-path "~/.emacs.d/PATH/TO/moe-theme/")
+(load-theme 'moe-dark t)
 
 
  
@@ -130,3 +133,32 @@
   :custom ((Doom-modeline-height 15)))
 ;(setq all-the-icons-color-icons nil)
 (setq find-file-visit-truename t)
+
+
+;; START LINE NUMBERS
+(column-number-mode)
+(global-display-line-numbers-mode t)
+;;(display-line-numbers-mode 0) ;; turn line numbers off
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+		shell-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+;; END LINE NUMBERS
+
+
+;; BEGIN RAINBOW DELIMITERS
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+;; END RAINBOW DELIMITERS
+
+
+;; BEGIN WHICH-KEY
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
+;; END WHICH-KEY

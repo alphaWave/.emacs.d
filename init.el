@@ -11,7 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
+   '(which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -47,7 +47,7 @@
 (load-theme 'moe-dark t)
 
 
- 
+
 ;; FONT SETTINGS
 					; (set-face-attribute 'default nil :font "Fira Code Retina" :height 280)
 (set-face-attribute 'default nil :height 125)
@@ -67,7 +67,7 @@
 
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-; this might lead to strange behavior, e.g. closing of windows etc., so in case this happepns, try turning it off
+					; this might lead to strange behavior, e.g. closing of windows etc., so in case this happepns, try turning it off
 
 
 ;; BELL: enable visible bell (instead of sound):
@@ -90,11 +90,11 @@
 
 (package-initialize)
 (unless package-archive-contents
- (package-refresh-contents))
+  (package-refresh-contents))
 
 ;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
-   (package-install 'use-package))
+  (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t) ;; makes sure all packages will be ensured
@@ -131,16 +131,34 @@
   :ensure
   :init (doom-modeline-mode 1)
   :custom ((Doom-modeline-height 15)))
-;(setq all-the-icons-color-icons nil)
+					;(setq all-the-icons-color-icons nil)
 (setq find-file-visit-truename t)
 
 
-
+;; START LINE NUMBERS
 (column-number-mode)
 (global-display-line-numbers-mode t)
+;;(display-line-numbers-mode 0) ;; turn line numbers off
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
                 term-mode-hook
+		shell-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+;; END LINE NUMBERS
+
+
+;; BEGIN RAINBOW DELIMITERS
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+;; END RAINBOW DELIMITERS
+
+
+;; BEGIN WHICH-KEY
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
+;; END WHICH-KEY
