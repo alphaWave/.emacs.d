@@ -133,3 +133,14 @@
   :custom ((Doom-modeline-height 15)))
 ;(setq all-the-icons-color-icons nil)
 (setq find-file-visit-truename t)
+
+
+
+(column-number-mode)
+(global-display-line-numbers-mode t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
