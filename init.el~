@@ -1,5 +1,6 @@
 ;; HELPFUL STUFF
-;; to re-evaluate this file (or any buffer), type: "M-x eval-buffer" or C-x C-e
+;; to re-evaluate this file (or any buffer), type: "M-x eval-buffer"
+;; or at the very last parenthesis of a function, reevaluate that function with C-x C-e
 
 
 
@@ -11,7 +12,7 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
+   '(ivy-rich which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -47,7 +48,7 @@
 (load-theme 'moe-dark t)
 
 
- 
+
 ;; FONT SETTINGS
 					; (set-face-attribute 'default nil :font "Fira Code Retina" :height 280)
 (set-face-attribute 'default nil :height 125)
@@ -67,7 +68,7 @@
 
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-; this might lead to strange behavior, e.g. closing of windows etc., so in case this happepns, try turning it off
+					; this might lead to strange behavior, e.g. closing of windows etc., so in case this happepns, try turning it off
 
 
 ;; BELL: enable visible bell (instead of sound):
@@ -90,14 +91,14 @@
 
 (package-initialize)
 (unless package-archive-contents
- (package-refresh-contents))
+  (package-refresh-contents))
 
 ;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
-   (package-install 'use-package))
+  (package-install 'use-package))
 
 (require 'use-package)
-(setq use-package-always-ensure t) ;; makes sure all packages will be ensured
+(setq use-package-always-ensure t) ;; makes sure all packages will be ensured, i.e. when first using a package, its dependencies will be downloaded
 
 (use-package command-log-mode)
 ;; (global-command-log-mode) ;; show command log in every buffer
@@ -113,16 +114,22 @@
          :map ivy-minibuffer-map
 	 ("TAB" . ivy-partial-or-done)
          ("C-l" . ivy-alt-done)
-         ("C-k" . ivy-next-line)
-         ("C-j" . ivy-previous-line)
+;;         ("C-k" . ivy-next-line)
+;;         ("C-j" . ivy-previous-line)
+	 ("C-n" . ivy-next-line)
+         ("C-p" . ivy-previous-line)
          :map ivy-switch-buffer-map
-         ("C-k" . ivy-next-line)
-         ("C-j" . ivy-previous-line)
+;;         ("C-k" . ivy-next-line)
+;;         ("C-j" . ivy-previous-line)
+	 ("C-n" . ivy-next-line)
+         ("C-p" . ivy-previous-line)
          ("C-l" . ivy-done)
          ("C-d" . ivy-switch-buffer-kill)
          :map ivy-reverse-i-search-map
-         ("C-k" . ivy-next-line)
-         ("C-j" . ivy-previous-line)
+;;         ("C-k" . ivy-next-line)
+;;         ("C-j" . ivy-previous-line)
+	 ("C-n" . ivy-next-line)
+         ("C-p" . ivy-previous-line)
          ("C-d" . ivy-reverse-i-search-kill))
   :config
   (ivy-mode 1))
@@ -131,8 +138,15 @@
   :ensure
   :init (doom-modeline-mode 1)
   :custom ((Doom-modeline-height 15)))
-;(setq all-the-icons-color-icons nil)
+					;(setq all-the-icons-color-icons nil)
 (setq find-file-visit-truename t)
+
+
+;; REPLACE SOME GLOBAL KEY BINDINGS
+;; (require 'bind-key)
+;; (bind-key* "C-k" 'next-line)
+;; (bind-key* "C-j" 'previous-line)
+;; END REPLACE SOME GLOBAL KEY BINDINGS
 
 
 ;; START LINE NUMBERS
@@ -162,3 +176,29 @@
   :config
   (setq which-key-idle-delay 0.3))
 ;; END WHICH-KEY
+
+
+(use-package ivy-rich
+  :init
+  (ivy-rich-mode 1))
+
+(use-package counsel
+  :bind (("M-x" . counsel-M-x)
+         ("C-x b" . counsel-ibuffer)
+         ("C-x C-f" . counsel-find-file)
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibuffer-history))
+
+
+  (use-package helpful
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function) ; this keeps the keybinding of describe-function but remaps that function to counsel-describe-function
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+
+
+
