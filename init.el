@@ -11,7 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
+   '(helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -176,6 +176,15 @@
          ("C-r" . 'counsel-minibuffer-history)))
 
 
+(use-package helpful
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
 
 
 
