@@ -1,6 +1,5 @@
 ;; HELPFUL STUFF
-;; to re-evaluate this file (or any buffer), type: "M-x eval-buffer"
-;; or at the very last parenthesis of a function, reevaluate that function with C-x C-e
+;; to re-evaluate this file (or any buffer), type: "M-x eval-buffer" or C-x C-e
 
 
 
@@ -12,7 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(ivy-rich which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
+   '(doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -44,8 +43,8 @@
 ;; (load-theme 'ample t t)
 ;; (enable-theme 'ample)
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/PATH/TO/moe-theme/")
-(load-theme 'moe-dark t)
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/PATH/TO/moe-theme/")
+;; (load-theme 'moe-dark t)
 
 
 
@@ -98,7 +97,7 @@
   (package-install 'use-package))
 
 (require 'use-package)
-(setq use-package-always-ensure t) ;; makes sure all packages will be ensured, i.e. when first using a package, its dependencies will be downloaded
+(setq use-package-always-ensure t) ;; makes sure all packages will be ensured
 
 (use-package command-log-mode)
 ;; (global-command-log-mode) ;; show command log in every buffer
@@ -114,22 +113,16 @@
          :map ivy-minibuffer-map
 	 ("TAB" . ivy-partial-or-done)
          ("C-l" . ivy-alt-done)
-;;         ("C-k" . ivy-next-line)
-;;         ("C-j" . ivy-previous-line)
-	 ("C-n" . ivy-next-line)
-         ("C-p" . ivy-previous-line)
+         ("C-k" . ivy-next-line)
+         ("C-j" . ivy-previous-line)
          :map ivy-switch-buffer-map
-;;         ("C-k" . ivy-next-line)
-;;         ("C-j" . ivy-previous-line)
-	 ("C-n" . ivy-next-line)
-         ("C-p" . ivy-previous-line)
+         ("C-k" . ivy-next-line)
+         ("C-j" . ivy-previous-line)
          ("C-l" . ivy-done)
          ("C-d" . ivy-switch-buffer-kill)
          :map ivy-reverse-i-search-map
-;;         ("C-k" . ivy-next-line)
-;;         ("C-j" . ivy-previous-line)
-	 ("C-n" . ivy-next-line)
-         ("C-p" . ivy-previous-line)
+         ("C-k" . ivy-next-line)
+         ("C-j" . ivy-previous-line)
          ("C-d" . ivy-reverse-i-search-kill))
   :config
   (ivy-mode 1))
@@ -140,13 +133,6 @@
   :custom ((Doom-modeline-height 15)))
 					;(setq all-the-icons-color-icons nil)
 (setq find-file-visit-truename t)
-
-
-;; REPLACE SOME GLOBAL KEY BINDINGS
-;; (require 'bind-key)
-;; (bind-key* "C-k" 'next-line)
-;; (bind-key* "C-j" 'previous-line)
-;; END REPLACE SOME GLOBAL KEY BINDINGS
 
 
 ;; START LINE NUMBERS
@@ -187,18 +173,35 @@
          ("C-x b" . counsel-ibuffer)
          ("C-x C-f" . counsel-find-file)
          :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history))
+         ("C-r" . 'counsel-minibuffer-history)))
 
 
-  (use-package helpful
-    :custom
-    (counsel-describe-function-function #'helpful-callable)
-    (counsel-describe-variable-function #'helpful-variable)
-    :bind
-    ([remap describe-function] . counsel-describe-function) ; this keeps the keybinding of describe-function but remaps that function to counsel-describe-function
-    ([remap describe-command] . helpful-command)
-    ([remap describe-variable] . counsel-describe-variable)
-    ([remap describe-key] . helpful-key))
+(use-package helpful
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
 
 
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
