@@ -11,7 +11,8 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
+   '(vdiff-magit counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -56,13 +57,12 @@
 
 ;; THANKS BUT NO THANKS
 
+
+(tool-bar-mode -1) ;; disable toolbar
 (set-fringe-mode 10) ;; "give some breathing room"
-
-(scroll-bar-mode -1) ;; disable visible scrollbar
-
+;; (scroll-bar-mode -1) ;; disable visible scrollbar
 ;; (tooltip-mode -10) ;; disable tooltips
-;; (tool-bar-mode -1) ;; disable toolbar
-;; (setq inhibit-startup-message t) ;; does what it says
+(setq inhibit-startup-message t) ;; does what it says
 
 
 ;; Make ESC quit prompts
@@ -198,6 +198,7 @@
   :init
   (ivy-rich-mode 1))
 
+;; supplements ivy with a custom tailored UI for each specific situation
 (use-package counsel
   :bind (("M-x" . counsel-M-x)
          ("C-x b" . counsel-ibuffer)
@@ -215,6 +216,75 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
+
+
+					
+;; the following package allows to define keybindings in a more concise way
+(use-package general
+  :config
+  (general-create-definer alphaWave/leader-keys ; define a pseudo-namespace called 'alphaWave'
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (alphaWave/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "tt" '(counsel-load-theme :which-key "choose theme")))		        
+
+
+;; Set the padding between lines
+(defvar line-padding 2)
+(defun add-line-padding ()
+  "Add extra padding between lines"
+
+  ; remove padding overlays if they already exist
+  (let ((overlays (overlays-at (point-min))))
+    (while overlays
+      (let ((overlay (car overlays)))
+        (if (overlay-get overlay 'is-padding-overlay)
+            (delete-overlay overlay)))
+      (setq overlays (cdr overlays))))
+
+  ; add a new padding overlay
+  (let ((padding-overlay (make-overlay (point-min) (point-max))))
+    (overlay-put padding-overlay 'is-padding-overlay t)
+    (overlay-put padding-overlay 'line-spacing (* .1 line-padding))
+    (overlay-put padding-overlay 'line-height (+ 1 (* .1 line-padding))))
+  (setq mark-active nil))
+
+(add-hook 'buffer-list-update-hook 'add-line-padding)
+;; end of line-padding function
+
+
+;; projectile is for managing projects (especially for coding n'stuff)
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+;  :custom ((projectile-completion-system 'ivy))
+  :bind-keymap
+  ("C-c p" . projectile-command-map) ;; shows all projectile commands
+  :init
+  ;; when I'm in my /CodingProjects-folder, sets the projectile search path to that same folder, so I'll see all the things that are in there immediately
+  (when (file-directory-p "~/CodingProjects")
+    (setq projectile-project-search-path '("~/CodingProjects")))
+  ;; whenever I switch between projects, it loads up dired so I see a listing of all the files in that project
+  (setq projectile-switch-project-action #'projectile-dired))
+
+
+(use-package counsel-projectile
+ :after projectile
+ :config
+ (counsel-projectile-mode 1))
+
+
+;; "A Git Porcelain inside Emacs. Magit is a complete text-based user interface to Git. It fills the glaring gap between the Git command-line interface and various GUIs, letting you perform trivial as well as elaborate version control tasks with just a couple of mnemonic key presses."
+(use-package magit
+  :commands (magit-status magit-get-current-branch)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+(use-package evil-magit
+  :after magit)
 
 
 

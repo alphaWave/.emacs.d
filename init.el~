@@ -11,7 +11,8 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package)))
+   '(counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -56,13 +57,12 @@
 
 ;; THANKS BUT NO THANKS
 
+
+(tool-bar-mode -1) ;; disable toolbar
 (set-fringe-mode 10) ;; "give some breathing room"
-
-(scroll-bar-mode -1) ;; disable visible scrollbar
-
+;; (scroll-bar-mode -1) ;; disable visible scrollbar
 ;; (tooltip-mode -10) ;; disable tooltips
-;; (tool-bar-mode -1) ;; disable toolbar
-;; (setq inhibit-startup-message t) ;; does what it says
+(setq inhibit-startup-message t) ;; does what it says
 
 
 ;; Make ESC quit prompts
@@ -127,12 +127,42 @@
   :config
   (ivy-mode 1))
 
+
+;; NOTE: The first time you load your configuration on a new machine, you'll
+;; need to run the following command interactively so that mode line icons
+;; display correctly:
+;;
+;; M-x all-the-icons-install-fonts
+
+(use-package all-the-icons)
+
+
 (use-package doom-modeline
   :ensure
   :init (doom-modeline-mode 1)
   :custom ((Doom-modeline-height 15)))
 					;(setq all-the-icons-color-icons nil)
 (setq find-file-visit-truename t)
+
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ;;  (load-theme 'doom-one t)
+  ;;  (load-theme 'doom-vibrant t)
+  (load-theme 'doom-city-lights t)
+  ;;  (load-theme 'doom-nord t)
+  
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 
 ;; START LINE NUMBERS
@@ -187,21 +217,62 @@
   ([remap describe-key] . helpful-key))
 
 
-(use-package doom-themes
-  :ensure t
+					
+;; the following package allows to define keybindings in a more concise way
+(use-package general
   :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
+  (general-create-definer alphaWave/leader-keys ; define a pseudo-namespace called 'alphaWave'
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+  (alphaWave/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "tt" '(counsel-load-theme :which-key "choose theme")))		        
+
+
+;; Set the padding between lines
+(defvar line-padding 2)
+(defun add-line-padding ()
+  "Add extra padding between lines"
+
+  ; remove padding overlays if they already exist
+  (let ((overlays (overlays-at (point-min))))
+    (while overlays
+      (let ((overlay (car overlays)))
+        (if (overlay-get overlay 'is-padding-overlay)
+            (delete-overlay overlay)))
+      (setq overlays (cdr overlays))))
+
+  ; add a new padding overlay
+  (let ((padding-overlay (make-overlay (point-min) (point-max))))
+    (overlay-put padding-overlay 'is-padding-overlay t)
+    (overlay-put padding-overlay 'line-spacing (* .1 line-padding))
+    (overlay-put padding-overlay 'line-height (+ 1 (* .1 line-padding))))
+  (setq mark-active nil))
+
+(add-hook 'buffer-list-update-hook 'add-line-padding)
+;; end of line-padding function
+
+
+;; projectile is for managing projects (especially for coding n'stuff)
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :custom ((projectile-completion-system 'ivy))
+  :bind-keymap
+  ("C-c p" . projectile-command-map) ;; show all projectile commands
+  :init
+  ;; when I'm in my /CodingProjects-folder, sets the projectile search path to that same folder, so I'll see all the things that are in there immediately
+  (when (file-directory-p "~/CodingProjects")
+    (setq projectile-project-search-path '("~/CodingProjects")))
+  ;; whenever I switch between projects, it loads up dired so I see a listing of all the files in that project
+  (setq projectile-switch-project-action #'projectile-dired))
+
+
+(use-package counsel-projectile
+ :after projectile
+ :config
+ (counsel-projectile-mode 1))
+
 
