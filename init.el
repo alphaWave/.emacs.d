@@ -70,6 +70,12 @@
 					; this might lead to strange behavior, e.g. closing of windows etc., so in case this happepns, try turning it off
 
 
+;; enable scrolling left and right with the trackpad
+(global-set-key [wheel-right] 'scroll-left)
+(global-set-key [wheel-left] 'scroll-right)
+(put 'scroll-left 'disabled nil)
+
+
 ;; BELL: enable visible bell (instead of sound):
 (setq visible-bell nil
       ring-bell-function 'double-flash-mode-line)
@@ -291,13 +297,9 @@
 ;;   :after magit)
 
 
-;; enable scrolling left and right with the trackpad
-(global-set-key [wheel-right] 'scroll-left)
-(global-set-key [wheel-left] 'scroll-right)
-(put 'scroll-left 'disabled nil)
-
-
+;; sort of connects magit with GitHub
 (use-package forge)
+
 
 
 
