@@ -11,7 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(forge vdiff-magit counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
+   '(lsp-mode forge vdiff-magit counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -302,5 +302,12 @@
 (use-package forge)
 
 
+;; language server protocol
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+  :config
+  (lsp-enable-which-key-integration t))
 
 
