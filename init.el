@@ -11,7 +11,7 @@
  ;; If there is more than one, they won't work right.
  '(global-tab-line-mode nil)
  '(package-selected-packages
-   '(vdiff-magit counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
+   '(forge vdiff-magit counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -281,7 +281,7 @@
 (use-package magit
   :commands (magit-status magit-get-current-branch)
   :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   ;; :commands (magit-status magit-get-current-branch)
   ;; :custom
   ;; (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
@@ -290,13 +290,14 @@
 ;; (use-package evil-magit
 ;;   :after magit)
 
-(use-package evil-magit
-  :after magit)
 
 ;; enable scrolling left and right with the trackpad
 (global-set-key [wheel-right] 'scroll-left)
 (global-set-key [wheel-left] 'scroll-right)
 (put 'scroll-left 'disabled nil)
+
+
+(use-package forge)
 
 
 
