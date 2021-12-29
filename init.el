@@ -298,6 +298,7 @@
 
 
 ;; sort of connects magit with GitHub
+;; to get this started i.e. connected to GitHub, check the forge-documentation under "3.2 Token Creation"
 (use-package forge)
 
 
