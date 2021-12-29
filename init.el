@@ -297,7 +297,7 @@
 ;;   :after magit)
 
 
-;; sort of connects magit with GitHub
+;; sort of connects magit with GitHub, allowing you to do Pull Requests etc. from within emacs
 ;; to get this started i.e. connected to GitHub, check the forge-documentation under "3.2 Token Creation"
 (use-package forge)
 
