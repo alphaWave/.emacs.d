@@ -302,7 +302,7 @@
 (use-package forge)
 
 
-;; language server protocol
+;; language server protocol: https://emacs-lsp.github.io,  https://github.com/emacs-lsp/lsp-mode
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :init
