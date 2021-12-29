@@ -282,9 +282,21 @@
   :commands (magit-status magit-get-current-branch)
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  ;; :commands (magit-status magit-get-current-branch)
+  ;; :custom
+  ;; (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  )
+
+;; (use-package evil-magit
+;;   :after magit)
 
 (use-package evil-magit
   :after magit)
+
+;; enable scrolling left and right with the trackpad
+(global-set-key [wheel-right] 'scroll-left)
+(global-set-key [wheel-left] 'scroll-right)
+(put 'scroll-left 'disabled nil)
 
 
 
