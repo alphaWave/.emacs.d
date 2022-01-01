@@ -1,4 +1,4 @@
-;; HELPFUL STUFF
+x;; HELPFUL STUFF
 ;; to re-evaluate this file (or any buffer), type: "M-x eval-buffer" or C-x C-e
 
 
