@@ -1,4 +1,4 @@
-x;; HELPFUL STUFF
+;; HELPFUL STUFF
 ;; to re-evaluate this file (or any buffer), type: "M-x eval-buffer" or C-x C-e
 
 
@@ -9,9 +9,12 @@ x;; HELPFUL STUFF
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
+ '(backup-directory-alist '((".*" . "~/.emacs.d/backups/")))
  '(global-tab-line-mode nil)
+ '(mouse-wheel-mode t)
  '(package-selected-packages
-   '(lsp-mode forge vdiff-magit counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
+   '(lsp-ivy company-box lsp-mode forge vdiff-magit counsel-projectile evil-magit magit projectile general doom-themes helpful which-key rainbow-delimiters moe-theme ample-theme monokai-theme spacemacs-theme doom-modeline ivy command-log-mode use-package))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -65,6 +68,7 @@ x;; HELPFUL STUFF
 (setq inhibit-startup-message t) ;; does what it says
 
 
+
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 					; this might lead to strange behavior, e.g. closing of windows etc., so in case this happepns, try turning it off
@@ -85,6 +89,25 @@ x;; HELPFUL STUFF
     (run-with-timer flash-sec nil #'invert-face 'mode-line)
     (run-with-timer (* 2 flash-sec) nil #'invert-face 'mode-line)
     (run-with-timer (* 3 flash-sec) nil #'invert-face 'mode-line)))
+
+
+;; use Stroustrup style for all C like languages
+(defun my-c-mode-common-hook ()
+  (c-set-style "stroustrup")
+  ;; other customizations can go here
+  )
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+
+;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
+
+
+;; ;; alternative code, not sure if either of these works...?
+;; (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+
+;; create the autosave & backup dir if necessary, since emacs won't.
+(make-directory "~/.emacs.d/autosaves/" t)
+(make-directory "~/.emacs.d/backups/" t)
 
 
 ;; Initialize package sources
@@ -309,5 +332,27 @@ x;; HELPFUL STUFF
   (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
   :config
   (lsp-enable-which-key-integration t))
+
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :defer t
+;;   :hook (lsp-mode . (lambda ()
+;;                       (let ((lsp-keymap-prefix "C-c l"))
+;;                         (lsp-enable-which-key-integration))))
+;;   :init
+;;   (setq lsp-keep-workspace-alive nil
+;;         lsp-signature-doc-lines 5
+;;         lsp-idle-delay 0.5
+;;         lsp-prefer-capf t
+;;         lsp-client-packages nil)
+;;   :config
+;;   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+
+
+;; OPTIONAL PACKAGES FOR LSP, SAYS https://www.youtube.com/watch?v=28Z8CJ8qRpY
+;; (use-package company-box)
+(use-package lsp-ivy)
+
+
 
 

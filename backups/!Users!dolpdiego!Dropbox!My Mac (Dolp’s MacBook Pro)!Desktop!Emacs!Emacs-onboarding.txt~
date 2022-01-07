@@ -1,0 +1,110 @@
+### KEYBIND:
+- keybind control and escape to something more reachable. like this: ctrl->cmd, esc->caps
+- what I did: ctrl -> CMD, alt -> CAPS
+
+
+### ALWAYS LAUNCH DAEMON, says guy on yt:
+emacs --daemon &
+emacsclient -c -a 'emacs'
+
+
+### to display buffers as tabs on top of screen:
+M-x global-tab-line-mode
+
+
+
+### copy-paste
+Options -> Use CUA Keys: uses the cut-copy-paste keybindings we're used to
+
+
+---***---
+CURRENT VID: Emacs From Scratch #8 - Build Your Own IDE with lsp-mode, 14:00
+---***---
+
+
+### HELP:
+bound to C-h
+C-h f function ;; describe function
+
+### For help/documentation about variables
+C-h v : Describe variable
+
+
+
+
+### how to re-evaluate init.el (or the current buffer in general):
+https://emacs.stackexchange.com/questions/21716/how-to-re-evaluate-and-apply-init-el
+https://www.masteringemacs.org/article/evaluating-elisp-emacs
+
+
+
+
+### Themes:
+M-x counsel-load-theme -> show all installed themes and load the one selected
+
+acceptable themes currently installed:
+- deeper-blue
+- tdsh-dark
+- wombat
+- tango-dark
+
+
+### About package usage:
+use-package is very helpful. just use syntax "(use-package PACKAGENAME)" to install the package
+
+
+### Keybindings:
+Ivy is very helpful for assigning keybindings. Note that they are only ever active for a particular mode. ("map: MODE" followed by this modes' keybindings)
+for global keybindings, use for example: "(global-set-key (kbd "<escape>") 'keyboard-escape-quit)"
+Ivy has context-dependent actions. When you-re in an ivy completion buffer, each item has actions associated with it, which you can show/start with M-o.
+
+
+### Evaluate last s-expression (sexp in Emacs/Lisp-lingo)
+C-x C-e
+
+
+
+### Provide defintion of a function / useful command with Ivy
+M-x, place cursor on desired function. Then: M-o d (popup after M-o has shows several other options)
+Or M-o h for help on the function.
+Generally, inside Ivy, M-o usually provides some other useful commands
+
+x
+### Change Theme:
+M-x counsel-load-theme
+for now, some of the Doom-themes are pretty effin cool. If more are needed, peach-melpa.org seems to be a good resource.
+
+
+### Eval any Emacs-List-Code:
+M-: (i.e. option-colon)
+
+
+### Check where in your buffer there's a parentheses-problem
+M-x check-parens
+
+
+### toggle comment
+C-x C-;    :comment line(s)
+M-; 	   :comment region
+
+
+### something useful about projectile - which is basically for managing (coding) projects:
+M-x counsel-projectile-rg does a grep over all files inside the current project, i.e. looks inside all of them for the search string and allows you to directly jump to that point inside that file
+C-c C-o then turns that search window into a persistent buffer
+
+
+### magit
+- M-x magit-status
+    1) by moving the cursor to the line of interest and pressing RET, more details about the selected item will appear in a new windowx
+    2) items with a little '>' on the left can be unfolded for more details by pressing TAB
+    3) move cursor onto an unstaged file and press 's' to stage it. to stage only part of the changes, highlight those parts and press 's'.
+    4) stage all files with capital 'S', unstage parts of files and single files with 'u', or 'U' for all files.
+- To show all magit-options, type '?'. To get out of this menu, use C-g
+- To commit, type 'c', then 'c' again, write Commit-message (it's nice that you'll see the diff in the adjacent window), and confirm with C-c C-c
+- Magit will open another buffer in the background that shows the status of what you're doing e.g. commits, pushes, etc.
+
+
+### lsp-mode (lsp = language server protocol; https://microsoft.github.io/language-server-protocol/, https://emacs-lsp.github.io, https://github.com/emacs-lsp/lsp-mode)
+M-x lsp
+C-c l
+
